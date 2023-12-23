@@ -1,12 +1,22 @@
 import meteor_data_class
 from pathlib import Path
 from datetime import datetime
+from xlwt import Workbook
+
+"""
+This function prints the welcome message to the program.
+"""
 
 
 def print_welcome_message():
     print('Welcome to the Meteorite Sorting Program!\n'
           'This program prints out user specified tables based on the categories and parameters passed into it.')
     print('Written by Charlie Dakai in December 2023\n')
+
+
+"""
+This function checks the user input and if it is either "<q" or "<Q" then it returns true, otherwise returns false
+"""
 
 
 def check_for_break(userInput):
@@ -17,10 +27,20 @@ def check_for_break(userInput):
         return False
 
 
+"""
+This function prints the file name which is inputted in the parameter
+"""
+
+
 def print_file_name(fileName):
     print()
     print('Target File: ', fileName)
     print()
+
+
+"""
+This function prints the mode which is inputted as a parameter
+"""
 
 
 def print_mode(mode_input):
@@ -29,12 +49,24 @@ def print_mode(mode_input):
     print()
 
 
+"""
+This function is very similar to the other check for break function earlier, 
+but this one checks for "Q" instead of "<q" or "<Q"
+"""
+
+
 def check_for_break_category(enteredCategory):
     if enteredCategory == "Q":
         print('Exiting the program. Goodbye!')
         return True
     else:
         return False
+
+
+"""
+This function makes sure the list has 12 values in it. If there are any blank, it replaces them with the empty string
+it returns a list of length 12.
+"""
 
 
 def check_list_length(inputList):
@@ -46,6 +78,11 @@ def check_list_length(inputList):
     return inputList
 
 
+"""
+This function makes a meteor object with all the attributes from the list that is passed as a parameter
+"""
+
+
 def make_meteor_object(attributeList):
     return meteor_data_class.MeteorDataEntry(attributeList[0], attributeList[1], attributeList[2],
                                              attributeList[3],
@@ -55,31 +92,33 @@ def make_meteor_object(attributeList):
                                              attributeList[11])
 
 
-# def filter_mass(mass, name, holdingList):
-#     if float(get_lower_limit()) < float(mass) < float(get_upper_limit()):
-#         list.append(meteor_object.name + ', ' + meteor_object.mass)
+"""
+This function prints a table to the console. It first prints the headers and then takes each element of the list that is 
+passed in and prints it so it is appropriately spaced and looks good
+"""
 
 
-def print_mass_table(massList):
-    print('=' * 40)
-    print(' ' * 2, 'Name', ' ' * 21, 'Mass (g)', ' ' * 16)
-    print('=' * 40)
+def print_table(List):
+    print('=' * 200)
+    print(' ' * 2, 'Name', ' ' * 20, 'ID', ' ' * 5, 'NameType', ' ' * 2, 'recClass', ' ' * 14, 'Mass(g)', ' ' * 6,
+          'Fall',
+          ' ' * 4, 'Year', ' ' * 4, 'recLat', ' ' * 7, 'recLong', ' ' * 7, 'GeoLocation', ' ' * 13, 'States', ' ' * 4,
+          'Countries')
+    print('=' * 200)
     count = 1
-    for i in range(len(massList)):
-        splitMass = massList[i].split(',')
-        print(f'{count:2} {splitMass[0]:25} {splitMass[1]:10}')
+    for i in range(len(List)):
+        splitList = List[i].split('\t')
+        print(f'{count:2} {splitList[0]:25} {splitList[1]:10}{splitList[2]:10}{splitList[3]:25}{splitList[4]:15}'
+              f'{splitList[5]:10}{splitList[6]:10}{splitList[7]:15}{splitList[8]:15}{splitList[9]:30}{splitList[10]:10}'
+              f'{splitList[11]:10}')
         count = count + 1
 
 
-def print_year_table(yearList):
-    year_count = 1
-    print('=' * 40)
-    print(' ' * 2, 'Name', ' ' * 20, 'Year', ' ' * 16)
-    print('=' * 40)
-    for i in range(len(yearList)):
-        splitYear = yearList[i].split(',')
-        print(f'{year_count:2} {splitYear[0]:25} {splitYear[1]:5}')
-        year_count = year_count + 1
+"""
+This function takes an user input, then checks from this input if the user wants to quit the program, then checks if 
+this input is a valid fileName, and if it is, returns this value, otherwise it runs the whole process again until a 
+valid file name is provided.
+"""
 
 
 def check_file_name():
@@ -94,7 +133,13 @@ def check_file_name():
             return file
         else:
             print("ERROR: TARGET FILE " + "\"" + file + "\"" " IS NOT VALID")
-            # break out not wokring until valid file provided
+
+
+"""
+This function takes an user input, then checks from this input if the user wants to quit the program, then checks if 
+this input is contained in a list of all the valid modes, and if it is, returns this value, otherwise it runs the whole 
+process again until a valid mode name is provided.
+"""
 
 
 def check_mode_type():
@@ -119,6 +164,13 @@ def check_mode_type():
             print("ERROR: " + mode + " is not a valid mode")
 
 
+"""
+This function takes an user input,  then checks if 
+this input is in a list of all the valid categories, and if it is, returns this value, otherwise it runs the whole 
+process again until a valid category name is provided.
+"""
+
+
 def check_category():
     while True:
         category = input('What attribute would u like to filter the data on?\n'
@@ -133,6 +185,13 @@ def check_category():
             print("ERROR: " + category + " is not a valid category")
 
 
+"""
+This function takes an user input, then checks from this input if the user wants to quit the program, then checks if 
+this input is a digit since we are looking for a mass value, and if it is returns this value, otherwise it runs the 
+whole process again until a valid input is provided.
+"""
+
+
 def check_lower_limit_mass():
     while True:
         lower_limit_mass = input('Enter the LOWER limit (inclusive) for the meteors mass(g) ("Q" to quit): ')
@@ -144,6 +203,13 @@ def check_lower_limit_mass():
             print("ERROR: " + lower_limit_mass + " is not a valid entry")
 
 
+"""
+This function takes an user input, then checks from this input if the user wants to quit the program, then checks if 
+this input is a digit since we are looking for a mass value, and if it is then it returns this value, otherwise it runs 
+the whole process again until a valid input is provided.
+"""
+
+
 def check_upper_limit_mass():
     while True:
         upper_limit_mass = input('Enter the UPPER limit (inclusive) for the meteors mass(g) ("Q" to quit): ')
@@ -153,6 +219,13 @@ def check_upper_limit_mass():
             return upper_limit_mass
         else:
             print("ERROR: " + upper_limit_mass + " is not a valid entry")
+
+
+"""
+This function takes an user input, then checks from this input if the user wants to quit the program, then checks if 
+this input is an integer since we are looking for a year, and if it is then it returns this value, otherwise it runs the 
+whole process again until a valid input is provided.
+"""
 
 
 def check_lower_year():
@@ -167,6 +240,13 @@ def check_lower_year():
             print("ERROR: " + lower_year + " is not a valid year")
 
 
+"""
+This function takes an user input, then checks from this input if the user wants to quit the program, then checks if 
+this input is an integer since we are looking for a year, and if it is then it returns this value, otherwise it runs the 
+whole process again until a valid input is provided.
+"""
+
+
 def check_upper_year():
     while True:
         upper_year = input('Enter the UPPER limit for the meteors YEAR (inclusive) (Q to quit): ')
@@ -177,6 +257,12 @@ def check_upper_year():
             return upper_year
         except ValueError:
             print("ERROR: " + upper_year + " is not a valid year")
+
+
+"""
+This function takes an user input,  then checks if this input is in a list of all the valid selections, and if it is, 
+returns this value, otherwise it runs the whole process again until a valid category name is provided.
+"""
 
 
 def check_data_selection():
@@ -194,6 +280,11 @@ def check_data_selection():
             print("ERROR: " + data_selection + " is not a valid option")
 
 
+"""
+this function returns the current data and time which we use later for naming excel and text files.
+"""
+
+
 def get_clean_datetime_string():
     current_timestamp = datetime.now()
     current_timestamp.strftime("%Y-%m-%d %H-%M-%S")
@@ -201,6 +292,12 @@ def get_clean_datetime_string():
     clean_timestamp_str = clean_timestamp_str.replace('.', '_')
     clean_timestamp_str = clean_timestamp_str.replace(' ', '_')
     return clean_timestamp_str
+
+
+"""
+This function takes in a file path and some data, and then opens this file in write mode and writes the inputted data 
+into the filepath provided. If the file is not found an error will occur.
+"""
 
 
 def write_to_text_file(file_path, data):
@@ -213,12 +310,45 @@ def write_to_text_file(file_path, data):
         print("ERROR: File not found")
 
 
+"""
+This function takes in a list and then loops through the list and takes every index of the list and holds it in a big 
+string. It adds a tab character everytime something new is added. It also goes onto a new line for every meteorite and
+its corresponding data.
+"""
+
+
 def list_to_tab_sep_string(given_list):
     big_list = ""
     for _ in range(len(given_list)):
-        for i in range(2):
-            big_list += (given_list[_] + "   ")
+        for i in range(1):
+            big_list += (given_list[_] + "\t")
         big_list += "\n"
     return big_list
+
+
+"""
+This function creates a workbook, opens a new sheet in the workbook, prints the headers in the sheet, and takes all the 
+data from the list passed in and formats it nicely in an excel file
+"""
+
+
+def filtered_results_to_excel(filtered_list):
+    excel_workbook = Workbook()
+    filtered_data_sheet = excel_workbook.add_sheet("FilteredMeteoriteData")
+    index = 0
+    name_list = ["name", "id", "nametype", "recclass", "mass (g)", "fall", "year", "reclat", "reclong",
+                 "GeoLocation", "States", "Counties"]
+    for attributes in name_list:
+        # write top row of the Excel output sheet -- __.write(row, column, value)
+        filtered_data_sheet.write(0, index, attributes)
+        index = index + 1
+    for index in range(len(filtered_list)):
+        current_meteor = filtered_list[index]
+        attribute_list = current_meteor.split("\t")
+        for attr_index in range(len(attribute_list)):
+            # write each row of the Excel output sheet -- __.write(row, column, value)
+            filtered_data_sheet.write(index + 1, attr_index, attribute_list[attr_index])
+    excel_workbook.save(get_clean_datetime_string()+'.xls')
+
 
 
